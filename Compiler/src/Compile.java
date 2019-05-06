@@ -29,7 +29,7 @@ public class Compile {
             throw new InvalidStatementException("Rejected");
     }
 
-    // creates a Table representing a given Automaton
-    // which should then be made into a Table (Object) or just printed out
-    // public static void graph(Automaton pattern){}
+    // Finds the alphabet to be fed into the TableObject's columns in GUI
+    // void may need to be changed to String[]
+    public static void graph(Automaton pattern){}
 }

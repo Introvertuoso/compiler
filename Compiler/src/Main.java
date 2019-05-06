@@ -1,19 +1,17 @@
 public class Main {
 
-    // ~Apply character changes from draft paper on desk
-    // Complete compile function (Done?)
-    // Create a GUI that passes a String to compile()
-    // Create the graph as a table in GUI
-    // Migrate showing logs to GUI
-    // Create the file and give its path to Automaton()
+    // TODO Test and debug everything
+    // TODO Create a GUI that passes a String to compile()
+    // TODO Create the graph as a table in GUI
+    // TODO Migrate showing logs to GUI
 
     public static void main(String[] args) {
-        /*
         try{
-            Automaton a = new Automaton();
+            Automaton a = new Automaton("dependencies\\target.txt");
         } catch (InvalidAutomatonException e){
             System.out.println(e.getMessage());
         }
+        /*
         try {
             Compile.match();
         } catch (InvalidStatementException e){

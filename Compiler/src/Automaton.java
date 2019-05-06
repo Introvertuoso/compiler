@@ -2,12 +2,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Stack;
 
 public class Automaton {
     private ArrayList<Case> cases;
-    //private List<Character> alphabet;
     private Case initial;
     private Case _final;
 
