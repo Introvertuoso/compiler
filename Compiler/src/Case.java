@@ -1,10 +1,11 @@
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Case {
     private CaseType state;
-    private ArrayList<Pair<String, Integer>> nextRules;
+    private Property type= Property.NONE;
+    private HashMap<String, Integer> nextRules = new HashMap<>();
 
-    public void Case(CaseType st, ArrayList<Pair<String, Integer>> rules){
+    public void Case(CaseType st, HashMap<String, Integer> rules){
         this.state = st;
         this.nextRules = rules;
     }
@@ -13,7 +14,7 @@ public class Case {
         return state;
     }
 
-    public ArrayList<Pair<String, Integer>> getNextRules() {
+    public HashMap<String, Integer> getNextRules() {
         return nextRules;
     }
 
@@ -21,7 +22,15 @@ public class Case {
         this.state = state;
     }
 
-    public void setNextRules(ArrayList<Pair<String, Integer>> nextRules) {
+    public void setNextRules(HashMap<String, Integer> nextRules) {
         this.nextRules = nextRules;
+    }
+
+    public Property getType() {
+        return type;
+    }
+
+    public void setType(Property type) {
+        this.type = type;
     }
 }

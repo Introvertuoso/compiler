@@ -2,18 +2,14 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Stack;
 
 public class Automaton {
-    private ArrayList<Case> cases;
+    private ArrayList<Case> cases = new ArrayList<>();
     private Case initial;
     private Case _final;
 
-    private int indexOfFinal;
     private int indexOfCurrent = 0;
-    private char[] temp = null;
-    private int keywordTracker = 0;
-    private Stack<Character> braces;
+    private ArrayList<Character> temp = new ArrayList<>();
     private boolean powerON = false;
 
     Automaton(String path) throws InvalidAutomatonException{
@@ -26,8 +22,7 @@ public class Automaton {
         initial.setState(CaseType.INITIAL);
         _final.setState(CaseType.FINAL);
         cases.add(initial);
-        cases.add(_final);
-        indexOfCurrent = cases.indexOf(_final);
+        indexOfCurrent = cases.indexOf(initial);
         if (
                 regexAsCharArray[regexAsCharArray.length-1] == ',' ||
                 regexAsCharArray[regexAsCharArray.length-1] == '+' ||
@@ -47,11 +42,10 @@ public class Automaton {
             }
             counter++;
         }
-        cases.get(indexOfCurrent).getNextRules().add(new Pair<>(temp.toString(), indexOfCurrent+1));
     }
 
     private String readFile(String filename){
-        String regex = null;
+        String regex = "";
         try{
             BufferedReader reader = new BufferedReader(new FileReader(filename));
             regex  = reader.readLine();
@@ -63,7 +57,7 @@ public class Automaton {
     }
 
     private void validateBrackets (char[] regex) throws InvalidAutomatonException{
-        if (regex != null) {
+        if (regex.length != 0) {
             int flag = 0;
             for (char i : regex) {
                 if (i == '(')
@@ -81,79 +75,62 @@ public class Automaton {
     private void createDFA(char i) throws InvalidAutomatonException{
         // Enters power mode
         if (i == '^'){
-            if (temp == null)
+            if (cases.isEmpty())
                 throw new InvalidAutomatonException("Nothing to use '^' for");
             powerON = true;
         }
         // Declares a new case
         else if (i == '('){
-            braces.push('(');
             Case c = new Case();
             c.setState(CaseType.FINAL);
+            _final.setState(CaseType.REGULAR);
+            _final = c;
             cases.add(c);
-            indexOfFinal = cases.indexOf(c);
         }
         // OR (adds new rule in same case)
-        else if (i == '+'){
-            if (temp == null)
+        else if (i == '+' && !powerON){
+            if (temp.isEmpty())
                 throw new InvalidAutomatonException("Nothing to use '+' for");
-            cases.get(indexOfCurrent).getNextRules().add(new Pair<>(temp.toString(), indexOfCurrent+1));
-            keywordTracker = 0;
-            temp = null;
+            cases.get(indexOfCurrent).getNextRules().put(getStringRepresentation(temp), indexOfCurrent+1);
+            temp.clear();
         }
         // AND (adds new case)
         else if (i == ',') {
-            if (temp == null)
-                throw new InvalidAutomatonException("Nothing to use ',' for");
-            Case c = new Case();
-            cases.add(c);
-            if (braces.empty()) {
-                c.setState(CaseType.FINAL);
-                cases.get(indexOfFinal).setState(CaseType.REGULAR);
-                indexOfFinal = cases.indexOf(c);
-            }
             indexOfCurrent++;
-            cases.get(indexOfCurrent).getNextRules().add(new Pair<>(temp.toString(), indexOfCurrent+1));
-            keywordTracker = 0;
-            temp = null;
         }
         // Omits the case and allows its repetition
         else if (i == '*' && powerON){
-            for (Pair<String, Integer> j: cases.get(indexOfCurrent-1).getNextRules()){
-                Pair p = new Pair(j.getFirst(), indexOfCurrent+2);
-                cases.get(indexOfCurrent-1).getNextRules().add(p);
-            }
-            for (Pair<String, Integer> j: cases.get(indexOfCurrent).getNextRules()){
-                Pair p = new Pair(j.getFirst(), indexOfCurrent);
-                cases.get(indexOfCurrent).getNextRules().add(p);
-            }
+            cases.get(indexOfCurrent).setType(Property.PSTAR);
             powerON = false;
         }
         // Allows case repetition
         else if (i == '+' && powerON){
-            for (Pair<String, Integer> j: cases.get(indexOfCurrent).getNextRules()){
-                Pair p = new Pair(j.getFirst(), indexOfCurrent);
-                cases.get(indexOfCurrent).getNextRules().add(p);
-            }
+            cases.get(indexOfCurrent).setType(Property.PPLUS);
             powerON = false;
         }
         // Keeps track of brackets
         else if (i == ')' ){
-            if (temp == null)
+            if (temp.isEmpty())
                 throw new InvalidAutomatonException("Empty automaton");
-            braces.pop();
+            cases.get(indexOfCurrent).getNextRules().put(getStringRepresentation(temp), indexOfCurrent+1);
+            temp.clear();
         }
         // Reads alphabet characters
         else {
-            if (i == '_'){
-                temp[keywordTracker] = '\u00A0';
-                keywordTracker++;
-            }
-            else {
-                temp[keywordTracker] = i;
-                keywordTracker++;
-            }
+            if (i == '_')
+                temp.add(' ');
+            else
+                temp.add(i);
         }
+    }
+
+    private String getStringRepresentation(ArrayList<Character> list) {
+        StringBuilder builder = new StringBuilder(list.size());
+        for(Character ch: list)
+        {
+            builder.append(ch);
+        }
+        return builder.toString();
     }
 
     public ArrayList<Case> getCases() {
