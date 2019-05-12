@@ -1,19 +1,21 @@
+import javax.swing.table.AbstractTableModel;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 public class Automaton {
     private ArrayList<Case> cases = new ArrayList<>();
     private Case initial;
     private Case _final;
 
-    private int indexOfCurrent = 0;
-    private ArrayList<Character> temp = new ArrayList<>();
-    private boolean powerON = false;
+    private static int indexOfCurrent = 0;
+    private static ArrayList<Character> temp = new ArrayList<>();
+    private static boolean powerON = false;
 
-    Automaton(String path) throws InvalidAutomatonException{
-        String regex = readFile(path);
+    Automaton(String regex) throws InvalidAutomatonException{
         regex = regex.replaceAll("\\s","");
         char[] regexAsCharArray = regex.toCharArray();
         validateBrackets(regexAsCharArray);
@@ -44,16 +46,43 @@ public class Automaton {
         }
     }
 
-    private String readFile(String filename){
-        String regex = "";
-        try{
-            BufferedReader reader = new BufferedReader(new FileReader(filename));
-            regex  = reader.readLine();
-            reader.close();
-        }catch(IOException e){
-            e.printStackTrace();
+    Automaton(ArrayList<Automaton> list){
+        initial = new Case();
+        initial.setState(CaseType.INITIAL);
+        cases.add(initial);
+        int offset = 0;
+
+        for (Automaton a : list){
+            for (Case c: a.getCases()){
+                if (c.getState() == CaseType.INITIAL){
+                    if (c.getType() == Property.PSTAR){
+                        initial.setType(Property.PSTAR);
+                    }
+                    else if (c.getType() == Property.PPLUS && initial.getType() != Property.PSTAR){
+                        initial.setType(Property.PPLUS);
+                    }
+                    HashMap<String, Integer> tempMap = c.getNextRules();
+                    Iterator it = tempMap.entrySet().iterator();
+                    while(it.hasNext()) {
+                        HashMap.Entry<String, Integer> j = (HashMap.Entry) it.next();
+                        initial.getNextRules().put(j.getKey(), j.getValue()+offset);
+                    }
+                }
+                else {
+                    Case clone = new Case();
+                    clone.setType(c.getType());
+                    clone.setState(c.getState());
+                    HashMap<String, Integer> tempMap = c.getNextRules();
+                    Iterator it = tempMap.entrySet().iterator();
+                    while(it.hasNext()) {
+                        HashMap.Entry<String, Integer> j = (HashMap.Entry) it.next();
+                        clone.getNextRules().put(j.getKey(), j.getValue()+offset);
+                    }
+                    cases.add(clone);
+                }
+            }
+            offset = a.getCases().size()-1;
         }
-        return regex;
     }
 
     private void validateBrackets (char[] regex) throws InvalidAutomatonException{

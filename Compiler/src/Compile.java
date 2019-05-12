@@ -7,37 +7,39 @@ public class Compile {
         int currentCase = 0;
         String attempt = "";
         int counter =0;
+        int x = 0;
 
         System.out.println();
         // Simple graph for debugging (can inspire the GUI graph)
         for (Case c: pattern.getCases()){
-            System.out.println("Case: " + counter + ", Type: " + c.getType().toString() + ", State: " + c.getState().toString());
+            System.out.println("Case: " + x + ", Type: " + c.getType().toString() + ", State: " + c.getState().toString());
             Iterator it = c.getNextRules().entrySet().iterator();
             while (it.hasNext()) {
                 HashMap.Entry pair = (HashMap.Entry)it.next();
                 System.out.println(pair.getKey() + " -> " + pair.getValue());
             }
-            counter++;
+            x++;
         }
 
         for (char i: targetAsCharArray){
+            int exists = -1;
             attempt = attempt + i;
             Case c = pattern.getCases().get(currentCase);
             if (c.getType() == Property.PSTAR){
-                if (checkCase(attempt, c)){
+                if ((exists = checkCase(attempt, c)) != -1){
                     attempt = "";
                 }
                 else {
                     currentCase++;
-                    if (checkCase(attempt, pattern.getCases().get(currentCase))){
-                        currentCase++;
+                    if ((exists = checkCase(attempt, pattern.getCases().get(currentCase))) != -1){
+                        currentCase = exists;
                         attempt= "";
                     }
                     else{
                         while (pattern.getCases().get(currentCase).getType() != Property.NONE){
                             currentCase++;
-                            if (checkCase(attempt, pattern.getCases().get(currentCase))){
-                                currentCase++;
+                            if ((exists = checkCase(attempt, pattern.getCases().get(currentCase))) != -1){
+                                currentCase = exists;
                                 attempt= "";
                             }
                         }
@@ -45,20 +47,20 @@ public class Compile {
                 }
             }
             else if (c.getType() == Property.PPLUS){
-                if (checkCase(attempt, c)){
+                if ((exists = checkCase(attempt, c)) != -1){
                     attempt = "";
                 }
                 else if (counter>0){
                     currentCase++;
-                    if (checkCase(attempt, pattern.getCases().get(currentCase))){
-                        currentCase++;
+                    if ((exists = checkCase(attempt, pattern.getCases().get(currentCase))) != -1){
+                        currentCase = exists;
                         attempt= "";
                     }
                     else{
                         while (pattern.getCases().get(currentCase).getType() != Property.NONE){
                             currentCase++;
-                            if (checkCase(attempt, pattern.getCases().get(currentCase))){
-                                currentCase++;
+                            if ((exists = checkCase(attempt, pattern.getCases().get(currentCase))) != -1){
+                                currentCase = exists;
                                 attempt= "";
                             }
                         }
@@ -71,8 +73,8 @@ public class Compile {
                 counter++;
             }
             else {
-                if (checkCase(attempt, c)){
-                    currentCase++;
+                if ((exists = checkCase(attempt, c)) != -1){
+                    currentCase = exists;
                     attempt="";
                 }
             }
@@ -86,8 +88,8 @@ public class Compile {
         }
     }
 
-    private static boolean checkCase(String s, Case c){
-        boolean exists = false;
+    private static int checkCase(String s, Case c){
+        int exists = -1;
         HashMap<String, Integer> tempMap = c.getNextRules();
         Iterator it = tempMap.entrySet().iterator();
         while(it.hasNext()) {
@@ -96,28 +98,28 @@ public class Compile {
                 char joker = s.toCharArray()[0];
                 if (j.getKey().compareTo("A..Z")== 0){
                     if (Character.isAlphabetic(joker)){
-                        exists = true;
+                        exists = j.getValue();
                     }
                 }
                 else if (j.getKey().compareTo("0..9") == 0){
                     if (Character.isDigit(joker)){
-                        exists = true;
+                        exists = j.getValue();
                     }
                 }
                 else if (j.getKey().compareTo(" ") == 0){
                     if (Character.isWhitespace(joker))
-                        exists = true;
+                        exists = j.getValue();
                 }
                 else {
                     String jokerString = "" + joker;
                     if (jokerString.compareTo(j.getKey()) == 0){
-                        exists = true;
+                        exists = j.getValue();
                     }
                 }
             }
             else {
                 if (s.compareTo(j.getKey()) == 0){
-                    exists = true;
+                    exists = j.getValue();
                 }
             }
         }
