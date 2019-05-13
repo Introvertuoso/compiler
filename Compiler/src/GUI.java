@@ -43,13 +43,8 @@ public class GUI extends Application {
         button.setText("Submit");
         button.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
-                ArrayList<String> subRegex = readFile("E:\\uni\\projects\\Third Year\\Second Semester\\Automata\\compiler\\Compiler\\dependencies\\target.txt");
-                ArrayList<Automaton> subAutos = new ArrayList<>();
                 try {
-                    for (String s : subRegex) {
-                        subAutos.add(new Automaton(s));
-                    }
-                    Automaton a = new Automaton(subAutos);
+                    Automaton a = new Automaton("E:\\\\uni\\\\projects\\\\Third Year\\\\Second Semester\\\\Automata\\\\compiler\\\\Compiler\\\\dependencies\\\\target.txt");
                     System.out.println(text.getText());
                //     acceptance= new Label("");
                     acceptance.setText(Compile.match(a, text.getText()));

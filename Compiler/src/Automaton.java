@@ -107,7 +107,11 @@ public class Automaton {
                 System.out.println(alphabetArray[i]);
             }
             //Iterate over employee array
-            casesJSON.forEach( c -> parseCaseObject( (JSONObject) c ) );
+            casesJSON.forEach( c -> {
+
+                cases.add(parseCaseObject((JSONObject) c));
+            }
+            );
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -126,12 +130,16 @@ public class Automaton {
         switch (type){
             case "initial":
                 resultCase.setState(CaseType.INITIAL);
+                break;
             case "regular":
                 resultCase.setState(CaseType.REGULAR);
+                break;
             case "final":
                 resultCase.setState(CaseType.FINAL);
+                break;
             case "terminal":
                 resultCase.setState(CaseType.TERMINAL);
+                break;
         }
 
         for(String s: alphabetArray){
