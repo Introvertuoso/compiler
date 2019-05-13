@@ -1,5 +1,9 @@
-import javax.swing.table.AbstractTableModel;
-import java.io.BufferedReader;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,8 +18,9 @@ public class Automaton {
     private static int indexOfCurrent = 0;
     private static ArrayList<Character> temp = new ArrayList<>();
     private static boolean powerON = false;
+    private static String[] alphabetArray;
 
-    Automaton(String regex) throws InvalidAutomatonException{
+    /*  Automaton(String regex) throws InvalidAutomatonException{
         regex = regex.replaceAll("\\s","");
         char[] regexAsCharArray = regex.toCharArray();
         validateBrackets(regexAsCharArray);
@@ -45,6 +50,7 @@ public class Automaton {
             counter++;
         }
     }
+*/
 
     Automaton(ArrayList<Automaton> list){
         initial = new Case();
@@ -83,6 +89,60 @@ public class Automaton {
             }
             offset = a.getCases().size()-1;
         }
+    }
+
+    Automaton(String s){
+        JSONParser jsonParser = new JSONParser();
+
+        try (FileReader reader = new FileReader(s))
+        {
+            //Read JSON file
+            Object obj = jsonParser.parse(reader);
+            JSONArray  DFA = (JSONArray) obj;
+            JSONArray alphabetJSON = (JSONArray) DFA.get(0);
+            JSONArray casesJSON = (JSONArray) DFA.get(1);
+            alphabetArray = new String[alphabetJSON.size()];
+            for (int i=0; i<alphabetJSON.size(); i++){
+                alphabetArray[i] = (String) alphabetJSON.get(i);
+                System.out.println(alphabetArray[i]);
+            }
+            //Iterate over employee array
+            casesJSON.forEach( c -> parseCaseObject( (JSONObject) c ) );
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static Case parseCaseObject(JSONObject c)
+    {
+        Case resultCase = new Case();
+        //Get type
+        String type = (String) c.get("type");
+        switch (type){
+            case "initial":
+                resultCase.setState(CaseType.INITIAL);
+            case "regular":
+                resultCase.setState(CaseType.REGULAR);
+            case "final":
+                resultCase.setState(CaseType.FINAL);
+            case "terminal":
+                resultCase.setState(CaseType.TERMINAL);
+        }
+
+        for(String s: alphabetArray){
+            if(c.get(s)!= null)
+                resultCase.getNextRules().put(s, Integer.parseInt(c.get(s).toString()));
+            else
+                resultCase.getNextRules().put(s, -1);
+        }
+
+
+        return resultCase;
     }
 
     private void validateBrackets (char[] regex) throws InvalidAutomatonException{

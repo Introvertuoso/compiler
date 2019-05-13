@@ -2,7 +2,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class Compile {
-    public static void match(Automaton pattern, String target) throws InvalidStatementException{
+    public static String match(Automaton pattern, String target) throws InvalidStatementException{
         char[] targetAsCharArray = target.toCharArray();
         int currentCase = 0;
         String attempt = "";
@@ -81,10 +81,15 @@ public class Compile {
         }
         System.out.println("\nProgram has reached case: #" + currentCase);
         if (pattern.getCases().get(currentCase).getState() == CaseType.FINAL){
-            throw new InvalidStatementException("Statement Accepted");
+            return "Statement Accepted";
+          //  throw new InvalidStatementException("Statement Accepted");
+
+
         }
         else {
-            throw new InvalidStatementException("Statement Rejected");
+            return "Statement Rejected";
+           // throw new InvalidStatementException("Statement Rejected");
+
         }
     }
 

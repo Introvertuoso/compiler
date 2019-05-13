@@ -12,23 +12,14 @@ public class Main {
     // TODO Migrate showing logs to GUI
 
     public static void main(String[] args) {
-        ArrayList<String> subRegex = readFile("dependencies\\target.txt");
-        ArrayList<Automaton> subAutos = new ArrayList<>();
-        try{
-            for (String s: subRegex){
-                subAutos.add(new Automaton(s));
-            }
-            Automaton a = new Automaton(subAutos);
-            Compile.match(a, "int Salary =9.678675;");
-        } catch (InvalidAutomatonException e){
-            System.out.println(e.getMessage());
-        }
-        catch (InvalidStatementException e){
-            System.out.println(e.getMessage());
-        }
+
+            Automaton a = new Automaton("E:\\uni\\projects\\Third Year\\Second Semester\\Automata\\compiler\\Compiler\\dependencies\\target.txt");
+           // Application.launch(GUI.class, args);
+           // Compile.match(a, "int Salary =9.678675;");
+
     }
 
-    private static ArrayList<String> readFile(String filename){
+    public static ArrayList<String> readFile(String filename){
         ArrayList<String> result = new ArrayList<>();
         String regex = "";
         try{

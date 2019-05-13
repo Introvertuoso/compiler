@@ -1,3 +1,3 @@
 public enum CaseType {
-    INITIAL, REGULAR, FINAL
+    INITIAL, REGULAR, FINAL, TERMINAL
 }
