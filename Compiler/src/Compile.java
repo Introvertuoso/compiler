@@ -8,10 +8,14 @@ public class Compile {
         String attempt = "";
         int counter =0;
         int x = 0;
+        int indexOfTerminal = -1;
 
         System.out.println();
         // Simple graph for debugging (can inspire the GUI graph)
         for (Case c: pattern.getCases()){
+            if (c.getState() == CaseType.TERMINAL){
+                indexOfTerminal = x;
+            }
             System.out.println("Case: " + x + ", Type: " + c.getType().toString() + ", State: " + c.getState().toString());
             Iterator it = c.getNextRules().entrySet().iterator();
             while (it.hasNext()) {
@@ -75,7 +79,11 @@ public class Compile {
             else {
                 if ((exists = checkCase(attempt, c)) != -1){
                     currentCase = exists;
-                    attempt="";
+                    attempt = "";
+                }
+                else if (indexOfTerminal != -1){
+                    currentCase = indexOfTerminal;
+                    attempt = "";
                 }
             }
         }
