@@ -114,7 +114,7 @@ public class Compile {
                         exists = j.getValue();
                     }
                 }
-                else if (j.getKey().compareTo("0..9") == 0){
+                else if (j.getKey().compareTo("\\d") == 0){
                     if (Character.isDigit(joker)){
                         exists = j.getValue();
                     }

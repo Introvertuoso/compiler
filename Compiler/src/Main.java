@@ -15,6 +15,7 @@ public class Main {
 
     public static void main(String[] args) {
 
+
           //  Automaton a = new Automaton("E:\\uni\\projects\\Third Year\\Second Semester\\Automata\\compiler\\Compiler\\dependencies\\target.txt");
             Application.launch(GUI.class, args);
            // Compile.match(a, "int Salary =9.678675;");

@@ -1,5 +1,21 @@
 [
-["0", "1"]
-[{"type":"initial", "0":"0", "1":"1"},
-{"type":"final", "0":"0", "1": "1"}]
+["abstract", "boolean","break", "byte", "case", "catch", "const", "continue", "default", "do", "double", "final", "finally", "float", "implements", "import", "instanceof", "int", "interface", "this", "throw", "throws", "/*", "*/", "//", "=", "_", ".", "A..Z", "\\d]
+[
+{"type" :"initial", "//" :1, "/*" :2, "abstract" :13, "boolean" :13,"break" :13, "byte" :13, "case" :13, "catch" :13, "const" :13, "continue" :13, "default" :13, "do" :13, "final" :13, "finally" :13, "implements" :13, "import" :13, "instanceof" :13, "interface" :13, "this" :13, "throw" :13, "throws" :13 , "\\d" :14}, 
+{"type" :"final","A..Z :1, "\\d" :1, "_" :1},
+{"type" :"regular", "A..Z" :2, "\\d" :2, "_" :2, "*/" :3},
+{"type" :"final"},
+{"type" :"regular", "_" :5},
+{"type" :"regular", "A..Z" :6},
+{"type" :"regular", "A..Z" :6, "\\d" :6,"_" :7},
+{"type" :"regular", "=" :8},
+{"type" :"regular", "\\d" :9},
+{"type" :"regular", "." :10, ";" :12},
+{"type" :"regular", "\\d" :11},
+{"type" :"regular", "\\d" :11, ";" :12},
+{"type" :"final"},
+{"type" :"final", "\\d" :13, ".":14},
+{"type" :"regular", "\\d" :15},
+{"type" :"final", "\\d" :15}
+]
 ]
