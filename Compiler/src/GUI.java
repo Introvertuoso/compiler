@@ -33,8 +33,8 @@ public class GUI extends Application {
         window.setScene(submitScene);
         window.show();
     }
-    private VBox submission()
-    {
+
+    private VBox submission() {
 
         Label label = new Label("Enter String to be checked: ");
         TextField text = new TextField();
@@ -86,7 +86,8 @@ public class GUI extends Application {
         v.getChildren().addAll(label,h);
         return v;
     }
-        public static ArrayList<String> readFile(String filename){
+
+    public static ArrayList<String> readFile(String filename){
         ArrayList<String> result = new ArrayList<>();
         String regex = "";
         try{
