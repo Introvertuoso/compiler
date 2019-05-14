@@ -1,21 +1,20 @@
 [
-["abstract", "boolean","break", "byte", "case", "catch", "const", "continue", "default", "do", "double", "final", "finally", "float", "implements", "import", "instanceof", "int", "interface", "this", "throw", "throws", "/*", "*/", "//", "=", "_", ".", "A..Z", "\\d"]
+["abstract", "boolean","break", "byte", "case", "catch", "const", "continue", "default", "do", "double", "final", "finally", "float", "implements", "import", "instance of", "int", "interface", "this", "throw", "throws", "/*", "*/", "//", "=", " ", ".", "A..Z", "0..9", ";"]
 ,[
-{"type" :"initial", "//" :1, "/*" :2, "abstract" :13, "boolean" :13,"break" :13, "byte" :13, "case" :13, "catch" :13, "const" :13, "continue" :13, "default" :13, "do" :13, "final" :13, "finally" :13, "implements" :13, "import" :13, "instanceof" :13, "interface" :13, "this" :13, "throw" :13, "throws" :13 , "0..9" :14},
-{"type" :"final", "A..Z" :1, "0..9" :1, "_" :1},
-{"type" :"regular", "A..Z" :2, "0..9" :2, "_" :2, "*/" :3},
+{"type" :"initial", "//" :1, "/*" :2, "int" :4, "double" :4, "float" :4, "abstract" :12, "boolean" :12,"break" :12, "byte" :12, "case" :12, "catch" :12, "const" :12, "continue" :12, "default" :12, "do" :12, "final" :12, "finally" :12, "implements" :12, "import" :12, "instance of" :12, "interface" :12, "this" :12, "throw" :12, "throws" :12 , "0..9" :13},
+{"type" :"final", "A..Z" :1, "0..9" :1, " " :1},
+{"type" :"regular", "A..Z" :2, "0..9" :2, " " :2, "*/" :3},
 {"type" :"final"},
-{"type" :"regular", "_" :5},
+{"type" :"regular", " " :5},
 {"type" :"regular", "A..Z" :6},
-{"type" :"regular", "A..Z" :6, "0..9" :6,"_" :7},
-{"type" :"regular", "=" :8},
-{"type" :"regular", "0..9" :9},
-{"type" :"regular", "." :10, ";" :12},
-{"type" :"regular", "0..9" :11},
-{"type" :"regular", "0..9" :11, ";" :12},
+{"type" :"regular", "A..Z" :6, "0..9" :6,"=" :7},
+{"type" :"regular", "0..9" :8},
+{"type" :"regular", "." :9, "0..9" :8, ";" :11},
+{"type" :"regular", "0..9" :10},
+{"type" :"regular", "0..9" :10, ";": 11},
 {"type" :"final"},
-{"type" :"final", "0..9" :13, ".":14},
-{"type" :"regular", "0..9" :15},
-{"type" :"final", "0..9" :15}
+{"type" :"final", "0..9" :12, ".":13},
+{"type" :"regular", "0..9" :14},
+{"type" :"final", "0..9" :14}
 ]
 ]

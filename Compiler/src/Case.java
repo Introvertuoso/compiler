@@ -26,6 +26,7 @@ public class Case {
         this.nextRules = nextRules;
     }
 
+
     public Property getType() {
         return type;
     }

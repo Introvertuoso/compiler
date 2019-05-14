@@ -29,54 +29,7 @@ public class Compile {
             int exists = -1;
             attempt = attempt + i;
             Case c = pattern.getCases().get(currentCase);
-            if (c.getType() == Property.PSTAR){
-                if ((exists = checkCase(attempt, c)) != -1){
-                    attempt = "";
-                }
-                else {
-                    currentCase++;
-                    if ((exists = checkCase(attempt, pattern.getCases().get(currentCase))) != -1){
-                        currentCase = exists;
-                        attempt= "";
-                    }
-                    else{
-                        while (pattern.getCases().get(currentCase).getType() != Property.NONE){
-                            currentCase++;
-                            if ((exists = checkCase(attempt, pattern.getCases().get(currentCase))) != -1){
-                                currentCase = exists;
-                                attempt= "";
-                            }
-                        }
-                    }
-                }
-            }
-            else if (c.getType() == Property.PPLUS){
-                if ((exists = checkCase(attempt, c)) != -1){
-                    attempt = "";
-                }
-                else if (counter>0){
-                    currentCase++;
-                    if ((exists = checkCase(attempt, pattern.getCases().get(currentCase))) != -1){
-                        currentCase = exists;
-                        attempt= "";
-                    }
-                    else{
-                        while (pattern.getCases().get(currentCase).getType() != Property.NONE){
-                            currentCase++;
-                            if ((exists = checkCase(attempt, pattern.getCases().get(currentCase))) != -1){
-                                currentCase = exists;
-                                attempt= "";
-                            }
-                        }
-                    }
-                    counter=0;
-                }
-                else {
-                    throw new InvalidStatementException("Case " + currentCase + " not met");
-                }
-                counter++;
-            }
-            else {
+
                 if ((exists = checkCase(attempt, c)) != -1){
                     currentCase = exists;
                     attempt = "";
@@ -85,7 +38,7 @@ public class Compile {
                     currentCase = indexOfTerminal;
                     attempt = "";
                 }
-            }
+
         }
         System.out.println("\nProgram has reached case: #" + currentCase);
         if (pattern.getCases().get(currentCase).getState() == CaseType.FINAL){
@@ -114,7 +67,7 @@ public class Compile {
                         exists = j.getValue();
                     }
                 }
-                else if (j.getKey().compareTo("\\d") == 0){
+                else if (j.getKey().compareTo("0..9") == 0){
                     if (Character.isDigit(joker)){
                         exists = j.getValue();
                     }
