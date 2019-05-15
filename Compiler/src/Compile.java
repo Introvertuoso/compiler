@@ -16,6 +16,9 @@ public class Compile {
             if (c.getState() == CaseType.TERMINAL){
                 indexOfTerminal = x;
             }
+            else if (c.getState() == CaseType.FINAL){
+                pattern.getFinalCases().add(c);
+            }
             System.out.println("Case: " + x + ", Type: " + c.getType().toString() + ", State: " + c.getState().toString());
             Iterator it = c.getNextRules().entrySet().iterator();
             while (it.hasNext()) {
@@ -26,36 +29,85 @@ public class Compile {
         }
 
         for (char i: targetAsCharArray){
-            int exists = -1;
+            int exists = -2;
             attempt = attempt + i;
             Case c = pattern.getCases().get(currentCase);
-
+            // Compiles the regex cases
+            if (c.getType() == Property.PSTAR){
                 if ((exists = checkCase(attempt, c)) != -1){
-                    currentCase = exists;
                     attempt = "";
                 }
-                else if (indexOfTerminal != -1){
+                else {
+                    currentCase++;
+                    if ((exists = checkCase(attempt, pattern.getCases().get(currentCase))) != -1){
+                        currentCase = exists;
+                        attempt= "";
+                    }
+                    else{
+                        while (pattern.getCases().get(currentCase).getType() != Property.NONE){
+                            currentCase++;
+                            if ((exists = checkCase(attempt, pattern.getCases().get(currentCase))) != -1){
+                                currentCase = exists;
+                                attempt= "";
+                            }
+                        }
+                    }
+                }
+            }
+            // Compiles regex cases
+            else if (c.getType() == Property.PPLUS){
+                if ((exists = checkCase(attempt, c)) != -1){
+                    attempt = "";
+                }
+                else if (counter>0){
+                    currentCase++;
+                    if ((exists = checkCase(attempt, pattern.getCases().get(currentCase))) != -1){
+                        currentCase = exists;
+                        attempt= "";
+                    }
+                    else{
+                        while (pattern.getCases().get(currentCase).getType() != Property.NONE){
+                            currentCase++;
+                            if ((exists = checkCase(attempt, pattern.getCases().get(currentCase))) != -1){
+                                currentCase = exists;
+                                attempt= "";
+                            }
+                        }
+                    }
+                    counter=0;
+                }
+                else {
+                    throw new InvalidStatementException("Case " + currentCase + " not met");
+                }
+                counter++;
+            }
+            // Is shared for regex and DFA compilation
+            else {
+                if ((exists = checkCase(attempt, c)) >= 0) {
+                    currentCase = exists;
+                    attempt = "";
+                } else if (exists == -1 && indexOfTerminal != -1) {
                     currentCase = indexOfTerminal;
                     attempt = "";
                 }
-
+            }
         }
         System.out.println("\nProgram has reached case: #" + currentCase);
         if (pattern.getCases().get(currentCase).getState() == CaseType.FINAL){
-            return "Statement Accepted";
+            return "Statement Accepted. It's a " + pattern.getCases().get(currentCase).getComment() + ".";
           //  throw new InvalidStatementException("Statement Accepted");
-
-
         }
         else {
             return "Statement Rejected";
            // throw new InvalidStatementException("Statement Rejected");
-
         }
     }
 
     private static int checkCase(String s, Case c){
-        int exists = -1;
+        // -2 is the doesn't exist value
+        // -1 is the exists and goes to Terminal Case value
+        // else is the exists and goes to a normal case value
+        int exists = -2;
         HashMap<String, Integer> tempMap = c.getNextRules();
         Iterator it = tempMap.entrySet().iterator();
         while(it.hasNext()) {

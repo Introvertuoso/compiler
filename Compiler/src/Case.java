@@ -4,6 +4,7 @@ public class Case {
     private CaseType state;
     private Property type= Property.NONE;
     private HashMap<String, Integer> nextRules = new HashMap<>();
+    private String comment;
 
     public void Case(CaseType st, HashMap<String, Integer> rules){
         this.state = st;
@@ -33,5 +34,13 @@ public class Case {
 
     public void setType(Property type) {
         this.type = type;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

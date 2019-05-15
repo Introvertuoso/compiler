@@ -44,7 +44,7 @@ public class GUI extends Application {
         button.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
                 try {
-                    Automaton a = new Automaton("E:\\uni\\projects\\Third Year\\Second Semester\\Automata\\compiler\\Compiler\\dependencies\\target.txt");
+                    Automaton a = new Automaton("C:\\Users\\ASUS\\Documents\\GitHub\\compiler\\Compiler\\dependencies\\target.txt");
                     System.out.println(text.getText());
                //     acceptance= new Label("");
                     acceptance.setText(Compile.match(a, text.getText()));

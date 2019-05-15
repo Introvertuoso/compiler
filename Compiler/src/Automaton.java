@@ -13,6 +13,7 @@ import java.util.Iterator;
 public class Automaton {
     private ArrayList<Case> cases = new ArrayList<>();
     private Case initial;
+    private ArrayList<Case> finalCases = new ArrayList<>();
     private Case _final;
 
     private static int indexOfCurrent = 0;
@@ -122,8 +123,7 @@ public class Automaton {
         }
     }
 
-    private static Case parseCaseObject(JSONObject c)
-    {
+    private static Case parseCaseObject(JSONObject c) {
         Case resultCase = new Case();
         //Get type
         String type = (String) c.get("type");
@@ -140,6 +140,10 @@ public class Automaton {
             case "terminal":
                 resultCase.setState(CaseType.TERMINAL);
                 break;
+        }
+
+        if (resultCase.getState() == CaseType.FINAL){
+            resultCase.setComment((String)c.get("comment"));
         }
 
         for(String s: alphabetArray){
@@ -232,5 +236,9 @@ public class Automaton {
 
     public ArrayList<Case> getCases() {
         return cases;
+    }
+
+    public ArrayList<Case> getFinalCases() {
+        return finalCases;
     }
 }
